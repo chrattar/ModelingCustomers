@@ -3,16 +3,14 @@ import json
 import folium
 from datetime import datetime
 
-# Specify the path to the CSV file
+#File Path and read
 csv_file_path = 'src/Mapping/map_data.csv'  # Replace with the actual path to your CSV file
-
-# Read the CSV file into a DataFrame
 df = pd.read_csv(csv_file_path)
 
-# File paths
+# Filepath
 json_file_path = 'src/Mapping/map_data.json'  # Desired JSON file name
 
-# Convert DataFrame to JSON
+# DF -> JSON
 markers = df.apply(lambda row: {
     "location": [row['latitude'], row['longitude']],
     "tooltip": row['tooltip'],
@@ -20,27 +18,24 @@ markers = df.apply(lambda row: {
     "icon_color": 'red' if datetime.strptime(row['date'], '%Y-%m-%d') < datetime(2024, 1, 1) else 'green'  # Assuming the 'date' column exists
 }, axis=1).tolist()
 
-# Write data to a JSON file
+# Write to JSON
 with open(json_file_path, 'w', encoding='utf-8') as jsonfile:
     json.dump(markers, jsonfile, indent=4)
-
 print("CSV data has been written to JSON file.")
 
 # Reading the JSON file
 with open(json_file_path, 'r', encoding='utf-8') as file:
     markers_data = json.load(file)
-
-# Displaying the data to verify
 print(json.dumps(markers_data, indent=4))
 
-# Initialize a Folium map
+# Init Folium Map
 map = folium.Map(location=[43.70876, -79.6954], zoom_start=10)
 
-# Create feature groups for different marker colors
+#Name the feature groups
 red_group = folium.FeatureGroup(name='Before 2024')
 green_group = folium.FeatureGroup(name='2024 and Later')
 
-# Add markers to the appropriate feature group
+#Markers, Tooltips, Icon Colors
 for marker_data in markers_data:
     marker = folium.Marker(
         location=marker_data['location'],
@@ -53,14 +48,12 @@ for marker_data in markers_data:
     elif marker_data['icon_color'] == 'green':
         marker.add_to(green_group)
 
-# Add feature groups to the map
+# Draw/Render to Map
 red_group.add_to(map)
 green_group.add_to(map)
-
-# Add LayerControl to switch between groups
+#Layer control
 folium.LayerControl().add_to(map)
-
-# Save the map to an HTML file
+# Save -> HTML
 map.save("src/Mapping/map.html")
 
 print("Map with markers has been created.")
