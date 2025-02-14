@@ -1,3 +1,5 @@
+import pandas as pd
+
 classification_distribution = {
     "A": {"percentage": 0.10, "sales_share": 0.75, "project_size_range": (500000, 2000000), "price_range": (6, 10)},
     "B": {"percentage": 0.30, "sales_share": 0.20, "project_size_range": (100000, 500000), "price_range": (7, 12)},
