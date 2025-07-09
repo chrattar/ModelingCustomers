@@ -1,7 +1,7 @@
 import random
 
 def generate_customer_data(customer_ids):
-    customer_data = {}  # Dictionary to store customer details
+    customer_data = {}  #DICT
 
     for customer_ID in customer_ids:
         customer_data[customer_ID] = {
@@ -11,11 +11,9 @@ def generate_customer_data(customer_ids):
             "longitude": round(random.uniform(-180, 180), 6)
         }
 
-    return customer_data  # Return full dataset
-
-# Generate data for the customers
+    return customer_data 
 customer_data = generate_customer_data(customer_ids)
 
-# Print a sample of the data (first 5 records)
+
 for customer, details in list(customer_data.items())[:5]:
     print(f"Customer {customer}: {details}")
